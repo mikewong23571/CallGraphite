@@ -40,6 +40,14 @@ Uploading to LLM...
 
 The exact output depends on the LLM integration, but you can expect a summary once all functions are processed.
 
+You can also capture the text of the function under the cursor using:
+
+```
+:CaptureFunction
+```
+
+This command uses tree-sitter to locate the nearest parent function and prints its source.
+
 ## License
 
 This project is licensed under the Apache License 2.0. See `LICENSE` for details.
