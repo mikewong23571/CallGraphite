@@ -48,6 +48,16 @@ You can also capture the text of the function under the cursor using:
 
 This command uses tree-sitter to locate the nearest parent function and prints its source.
 
+
+## Running Tests
+
+Install the Python dependencies and run pytest:
+
+```bash
+pip install -r requirements.txt
+pytest
+```
+
 ## License
 
 This project is licensed under the Apache License 2.0. See `LICENSE` for details.
