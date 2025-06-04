@@ -48,6 +48,15 @@ You can also capture the text of the function under the cursor using:
 
 This command uses tree-sitter to locate the nearest parent function and prints its source.
 
+Navigation through analysed locations is possible using:
+
+```
+:CallGraphiteBack
+:CallGraphiteForward
+```
+
+These commands move through the internal jump stack maintained by the plugin, mirroring Neovim's own jump list.
+
 
 ## Running Tests
 
