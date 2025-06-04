@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Utilities for extracting source code from the current buffer."""
+from __future__ import annotations
 from typing import Optional
 from pynvim import Nvim
 

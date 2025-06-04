@@ -1,4 +1,5 @@
 """Abstractions for interacting with a language model service."""
+from __future__ import annotations
 from typing import Any
 
 
