@@ -4,15 +4,16 @@ from __future__ import annotations
 from typing import Optional
 from pynvim import Nvim
 
+from .lua_utils.helpers import run_get_current_function_body
+
 
 def get_current_function_text(nvim: Nvim) -> Optional[str]:
     """Return the text of the function under the cursor.
 
     The implementation relies on tree-sitter to locate the nearest parent
     function node and then extracts the lines for that range. This function
-    mirrors the Lua snippet used in the ``CaptureFunction`` command but is
-    presented here as a reusable Python helper.
+    uses the Lua implementation in get_current_function_body.lua.
     """
-    # TODO: Implement tree-sitter based extraction.
-    return None
+    # 使用task_id=0，因为我们不需要异步回调
+    return run_get_current_function_body(nvim, 0)
 

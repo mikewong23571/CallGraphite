@@ -31,14 +31,32 @@ class CallGraphitePlugin:
     @command('CallGraphite', nargs='0', range='')
     def call_graphite(self, args, range):
         """Traverse the project and analyse functions via an LLM."""
-        # self.manager = traverse_project(self.nvim)
-        # command = 'lua vim.lsp.buf.references()'
-        # output = self.nvim.command_output(command)
-        # logger.info("command: %s, output: %s", command, output)
-
         logger.info('CallGraphite')
-
-        # helpers.run_get_buf_references(self.nvim, 1)
+        
+        # 显示开始消息
+        self.nvim.out_write("CallGraphite: Starting analysis...\n")
+        
+        # 设置状态栏消息
+        self.nvim.command('let &statusline = "%#StatusLine#CallGraphite: Analyzing...%="')
+        
+        try:
+            # 使用遍历管理器
+            self.manager = traverse_project(self.nvim)
+            
+            # 恢复状态栏
+            self.nvim.command('let &statusline = &statusline')
+            
+            # 显示完成消息
+            self.nvim.out_write("CallGraphite: Analysis complete!\n")
+        except Exception as e:
+            # 处理错误
+            logger.error(f"Error in CallGraphite: {e}")
+            self.nvim.err_write(f"CallGraphite error: {e}\n")
+            
+            # 恢复状态栏
+            self.nvim.command('let &statusline = &statusline')
+        
+        # 记录函数体，用于调试
         logger.info('CallGraphite, func body: %s', helpers.run_get_current_function_body(self.nvim, 1))
 
     @command('CallGraphiteBack', nargs='0', range='')
@@ -86,8 +104,39 @@ class CallGraphitePlugin:
                 "col": col,
                 "text": f"{path}:{line}:{col}"
             })
-            CallGraphitePlugin.jump_to_location(nvim, loc[1])
+            # 修复这里的bug，使用loc而不是loc[1]
+            CallGraphitePlugin.jump_to_location(nvim, loc)
             break
 
-        # nvim.call("setqflist", qf_list, 'r')
-        # nvim.command("copen")
+        # 取消注释这些行，启用quickfix列表
+        nvim.call("setqflist", qf_list, 'r')
+        nvim.command("copen")
+
+
+@neovim.command('CallGraphiteVisualize', nargs='*', range='', sync=True)
+def visualize_call_graph(self, args, range):
+    """Generate and display call graph visualization for the current function."""
+    try:
+        # 获取当前函数文本
+        source = get_current_function_text(self.nvim)
+        if not source:
+            self.nvim.command('echo "No function found at cursor position"')
+            return
+
+        # 创建遍历管理器
+        traversal = TraversalManager(self.nvim)
+        
+        # 获取当前位置
+        uri, line, col = traversal._cursor_location()
+        symbol = f"{uri}:{line}:{col}"
+        
+        # 分析函数并生成可视化
+        traversal.visit_function(symbol, source)
+        
+        # 单独生成可视化（如果用户只想要可视化而不进行完整遍历）
+        traversal._generate_visualizations(symbol)
+        
+        self.nvim.command('echo "Call graph visualization generated"')
+    except Exception as e:
+        logger.error(f"Error in visualize_call_graph: {e}")
+        self.nvim.command(f'echoerr "Error generating visualization: {str(e)}"')
