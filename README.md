@@ -9,7 +9,7 @@ Use your favourite Neovim plugin manager. Examples are shown below.
 ### Using Plug
 
 ```vim
-Plug 'mike96265/CallGraphite'
+Plug 'mikewong23571/CallGraphite'
 ```
 
 After running `:PlugInstall`, restart Neovim and run `:UpdateRemotePlugins` so the Python plugin is registered.
@@ -18,7 +18,7 @@ After running `:PlugInstall`, restart Neovim and run `:UpdateRemotePlugins` so t
 
 ```lua
 use {
-  'mike96265/CallGraphite',
+  'mikewong23571/CallGraphite',
   run = ':UpdateRemotePlugins'
 }
 ```
@@ -42,4 +42,4 @@ The exact output depends on the LLM integration, but you can expect a summary on
 
 ## License
 
-This project is licensed under the MIT license. See `LICENSE` for details.
+This project is licensed under the Apache License 2.0. See `LICENSE` for details.
