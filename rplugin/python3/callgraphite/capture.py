@@ -15,5 +15,5 @@ def get_current_function_text(nvim: Nvim) -> Optional[str]:
     uses the Lua implementation in get_current_function_body.lua.
     """
     # 使用task_id=0，因为我们不需要异步回调
-    return run_get_current_function_body(nvim, 0)
+    return run_get_current_function_body(nvim)
 

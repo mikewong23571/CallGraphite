@@ -1,17 +1,18 @@
 """Configuration management for CallGraphite."""
+import json
 import os
 from typing import Dict, Any
-import json
+
 
 def default_config() -> dict:
     """Return the default configuration."""
     return {
         "llm": {
-            "endpoint": "https://api.openai.com/v1/chat/completions",
+            "endpoint": "https://api.deepseek.com/v1/chat/completions",
             "api_key": "",  # 用户需要设置自己的API密钥
-            "model": "gpt-3.5-turbo",
+            "model": "deepseek-chat",
             "temperature": 0.3,
-            "max_tokens": 500
+            "max_tokens": 4096
         },
         "visualization": {
             "enabled": True,
@@ -22,15 +23,15 @@ def default_config() -> dict:
         },
         "analysis": {
             "comprehensive": True,  # 是否进行综合分析
-            "cache_results": True   # 是否缓存分析结果
+            "cache_results": True  # 是否缓存分析结果
         }
     }
 
 
 def load_config() -> Dict[str, Any]:
     """Load configuration from file or environment variables."""
-    config = DEFAULT_CONFIG.copy()
-    
+    config = default_config()
+
     # 尝试从文件加载
     config_path = os.path.expanduser("~/.config/callgraphite/config.json")
     if os.path.exists(config_path):
@@ -41,13 +42,13 @@ def load_config() -> Dict[str, Any]:
                 _update_dict(config, file_config)
         except Exception as e:
             print(f"Error loading config file: {e}")
-    
+
     # 从环境变量加载
     if "OPENAI_API_KEY" in os.environ:
         config.setdefault("llm", {})["api_key"] = os.environ["OPENAI_API_KEY"]
     if "OPENAI_MODEL" in os.environ:
         config.setdefault("llm", {})["model"] = os.environ["OPENAI_MODEL"]
-    
+
     return config
 
 
